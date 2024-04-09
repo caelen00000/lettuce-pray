@@ -12,6 +12,7 @@ total_population = y(:, 1) + y(:, 2);
 
 figure(1);
 plot(t, y, t, total_population);
+ylim([0, 1.5]);
 legend(["E: sensitive bacteria", "I: infected bacteria", "C: phage concentration", "Total bacteria"]);
 
 function dydt = system(~, y)

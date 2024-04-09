@@ -47,13 +47,17 @@ mu_g = @(T, y) alph * (T - T_0)^2 * (1 - gamma / K);
 
 F_gamma = @(t) 1 - (1 - q_t_g) * exp(-gamma * (t - t_g));
 
-%Is this correct? Does this need a different heaviside 0 value?
+%makes heaviside act like the correct type of comparison
+oldparam = sympref('HeavisideAtOrigin', 1);
+
 mu = @(t, y) mu_g(T(t), y) * F_gamma(t) * heaviside(-d(t) + T_DPD);
 
 F_lambda = @(t) c_t_d * exp(-lambda * (t - t_d));
 
-%Is this correct? Does this need a different heaviside 0 value?
 k = @(t) (1 + L(t) / (b + L(t))) * d(t) * a * F_lambda(t) * heaviside(d(t) - T_DPD);
+
+%restores your original heaviside origin setting
+sympref('HeavisideAtOrigin', oldparam);
 
 dydt = @(t, y) (mu(t, y) - k(t)) * y;
 
